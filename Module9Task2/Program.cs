@@ -7,17 +7,14 @@ namespace Module9Task2
         public delegate void ShowArrayDelegate(string[] array);
         static void Main(string[] args)
         {
-            while (true)
+            NumberReader numberReader = new NumberReader();
+            numberReader.NumberEnteredEvent += Show;
+            bool status = true;
+            while (status)
             {
                 try
                 {
-                    NumberReader numberReader = new NumberReader();
-                    string[] array 
-                    int number = numberReader.Read();
-                    numberReader.NumberEnteredEvent += Show;
-
-
-
+                    numberReader.Read();
                 }
                 catch (ArgumentOutOfRangeException)
                 {
@@ -31,10 +28,15 @@ namespace Module9Task2
                 {
                     Console.WriteLine("Введено некорректное значение");
                 }
+                finally
+                {
+                    status = false;
+                }
             }
         }
-        static void Show(int number, string[] array)
+        static void Show(int number)
         {
+            string[] array = LastNames();
             switch (number)
             {
                 case 1:
@@ -47,15 +49,31 @@ namespace Module9Task2
                     break;
             }
         }
-        
-
+        static string[] LastNames()
+        {
+            string[] array = new string[5];
+            for (int i = 0; i < array.Length; i++)
+            {
+                Console.Write($"Введите фамилию номер {i + 1}: ");
+                array[i] = Console.ReadLine();
+                if (array[i].Length < 2)
+                {
+                    throw new ArgumentOutOfRangeException();
+                }
+                foreach (var letter in array[i])
+                {
+                    if (!Char.IsLetter(letter)) throw new ArrayTypeMismatchException();
+                }
+            }
+            return array;
+        }
         static void SortAscend(string[] array)
         {
             bool flag = true;
             while (flag)
             {
                 flag = false;
-                for (int i = 0; i < array.Length - 1; ++i)
+                for (int i = 0; i < array.Length - 1; i++)
                     if (array[i].CompareTo(array[i + 1]) > 0)
                     {
                         string buf = array[i];
@@ -73,7 +91,7 @@ namespace Module9Task2
             while (flag)
             {
                 flag = false;
-                for (int i = 0; i < array.Length - 1; ++i)
+                for (int i = 0; i < array.Length - 1; i++)
                     if (array[i].CompareTo(array[i + 1]) < 0)
                     {
                         string buf = array[i];
@@ -87,40 +105,58 @@ namespace Module9Task2
         }
     }
 
+    //class NumberReader
+    //{
+    //    public delegate void NumberEnteredDelegate(int number, string[] array);
+    //    public event NumberEnteredDelegate NumberEnteredEvent;
+
+    //    public int Read()
+    //    {
+    //        Console.WriteLine("Для того, чтобы отсортировать список в формате А-Я, введите \"1\",\nдля сортировки в формате Я-А введите \"2\"");
+    //        int number = Convert.ToInt32(Console.ReadLine());
+    //        if (number != 1 && number != 2) throw new FormatException();
+    //        return number;
+
+    //    }
+    //    static string[] LastNames()
+    //    {
+    //        string[] array = new string[5];
+    //        for (int i = 0; i < array.Length - 1; i++)
+    //        {
+    //            Console.WriteLine($"Введите фамилию номер {i + 1}");
+    //            array[i] = Console.ReadLine();
+    //            if (array[i].Length < 2)
+    //            {
+    //                throw new ArgumentOutOfRangeException();
+    //            }
+    //            foreach (var letter in array[i])
+    //            {
+    //                if (!Char.IsLetter(letter)) throw new ArrayTypeMismatchException();
+    //            }
+    //        }
+    //        return array;
+    //    }
+    //    protected virtual void NumberEntered(int number, string[] array)
+    //    {
+    //        NumberEnteredEvent?.Invoke(number, LastNames());
+    //    }
+    //}
     class NumberReader
     {
-        public delegate void NumberEnteredDelegate(int number, string[] array);
+        public delegate void NumberEnteredDelegate(int number);
         public event NumberEnteredDelegate NumberEnteredEvent;
-
-        public int Read()
+        
+        public void Read()
         {
             Console.WriteLine("Для того, чтобы отсортировать список в формате А-Я, введите \"1\",\nдля сортировки в формате Я-А введите \"2\"");
             int number = Convert.ToInt32(Console.ReadLine());
             if (number != 1 && number != 2) throw new FormatException();
-            return number;
+            NumberEntered(number);
+        }
 
-        }
-        static string[] LastNames()
+        protected virtual void NumberEntered(int number)
         {
-            string[] array = new string[5];
-            for (int i = 0; i < array.Length - 1; i++)
-            {
-                Console.WriteLine($"Введите фамилию номер {i + 1}");
-                array[i] = Console.ReadLine();
-                if (array[i].Length < 2)
-                {
-                    throw new ArgumentOutOfRangeException();
-                }
-                foreach (var letter in array[i])
-                {
-                    if (!Char.IsLetter(letter)) throw new ArrayTypeMismatchException();
-                }
-            }
-            return array;
-        }
-        protected virtual void NumberEntered(int number, string[] array)
-        {
-            NumberEnteredEvent?.Invoke(number, LastNames());
+            NumberEnteredEvent?.Invoke(number);
         }
     }
 }
