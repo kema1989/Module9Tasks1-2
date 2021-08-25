@@ -7,6 +7,10 @@ namespace Module9Task2
         public delegate void ShowArrayDelegate(string[] array);
         static void Main(string[] args)
         {
+            ShowLastNames();
+        }
+        static void ShowLastNames()
+        {
             NumberReader numberReader = new NumberReader();
             numberReader.NumberEnteredEvent += Show;
             bool status = true;
@@ -19,14 +23,17 @@ namespace Module9Task2
                 catch (ArgumentOutOfRangeException)
                 {
                     Console.WriteLine("Фамилия не может состоять менее, чем из двух букв");
+                    ShowLastNames();
                 }
                 catch (ArrayTypeMismatchException)
                 {
                     Console.WriteLine("Фамилия должна состоять только из букв");
+                    ShowLastNames();
                 }
                 catch (FormatException)
                 {
                     Console.WriteLine("Введено некорректное значение");
+                    ShowLastNames();
                 }
                 finally
                 {
