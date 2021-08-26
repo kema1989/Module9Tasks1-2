@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Module9Task1
 {
@@ -6,67 +7,97 @@ namespace Module9Task1
     {
         static void Main(string[] args)
         {
-            Exception[] exceptions = new Exception[5];
-            exceptions[0] = new Exception();
-            try
-            {
-
-            }
-            catch(ArgumentNullException) // Исключение №1
-            {
-                Console.WriteLine("Поле не может быть пустым...");
-            }
-            catch (ArrayTypeMismatchException ex) // Исключение №2
-            {
-                Console.WriteLine(ex.Message);
-            }
-            finally
-            {
-
-            }
+            Method();
         }
         static void Method()
         {
-
-        }
-        static (string, string, int, double, double, double, double) Anketa()
-        {
-            (string name, string surname, byte age, double mathscore, double engscore, double totalscore) anketa;
-            anketa.name = Console.ReadLine();
-            anketa.surname = Console.ReadLine();
-            if(anketa.name.Length < 2 || anketa.surname.Length < 2)
+            var exceptions = new[] { new Exception(), new ArgumentNullException(), new ArrayTypeMismatchException(), new DivideByZeroException(), new IndexOutOfRangeException() };
+            foreach (var item in exceptions)
             {
-                Exception shortname = new Exception("Имя/фамилия должны состоять минимум из двух букв");
-                throw shortname;
+                try
+                {
+                    Survey();
+                }
+                catch (ArgumentNullException)
+                {
+                    Console.WriteLine("Нельзя передавать пустую строку...");
+                    Method();
+                }
+                catch (ArrayTypeMismatchException ex)
+                {
+                    Console.WriteLine(ex.Message);
+                    Method();
+                }
+                catch (FormatException)
+                {
+                    Console.WriteLine("Введено значение неверного формата");
+                    Method();
+                }
+                catch (IndexOutOfRangeException)
+                {
+                    Console.WriteLine("Запрашиваемый номер выходит за границы допустимых номеров");
+                    Method();
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e.Message);
+                    Method();
+                }
+            }
+        }
+        static void Survey()
+        {
+            (byte age, string name, string surname, string opinion, string gift) anketa;
+            Console.WriteLine("Предлагаем ответить на 1 вопрос и получить подарок!");
+            
+            Console.WriteLine("Введите ваш возраст");
+            anketa.age = Convert.ToByte(Console.ReadLine());
+            if(anketa.age < 18)
+            {
+                throw new Exception("Возраст должен быть больше 18");
+            }
+
+            Console.WriteLine("Введите ваше имя");
+            anketa.name = Console.ReadLine();
+            if (anketa.name.Length < 2)
+            {
+                throw new Exception("Имя должно состоять минимум из двух букв");
             }
             foreach (var letter in anketa.name)
             {
-                if (!Char.IsLetter(letter)) throw new ArrayTypeMismatchException("Имя/фамилия должны иметь только буквы");
+                if (!Char.IsLetter(letter)) throw new ArrayTypeMismatchException("Имя должно состоять только из букв");
+            }
+
+            Console.WriteLine("Введите вашу фамилию");
+            anketa.surname = Console.ReadLine();
+            if(anketa.surname.Length < 2)
+            {
+                throw new Exception("Фамилия должна состоять минимум из двух букв");
             }
             foreach (var letter in anketa.surname)
             {
-                if (!Char.IsLetter(letter)) throw new ArrayTypeMismatchException("Имя/фамилия должны иметь только буквы");
+                if (!Char.IsLetter(letter)) throw new ArrayTypeMismatchException("Фамилия должна состоять только из букв");
             }
-            anketa.age = Convert.ToByte(Console.ReadLine());
 
-        }
+            Console.WriteLine("Напишите ваше мнение о продукции компании Apple, в частности о планшетах Apple iPad. Актуально ли их использование?");
+            anketa.opinion = Console.ReadLine();
+            if(anketa.opinion.Length < 5)
+            {
+                throw new Exception("Ответ на вопрос должен быть не короче 5 символов...");
+            }
 
-        static double MathTest()
-        {
-            Console.WriteLine("Вас ожидают три вопроса по математике, каждый дает разное количество баллов");
-            Console.WriteLine("1. (4 балла) Среднее геометрическое чисел а и b: меньше или равно среднему квадратичному a и b (вариант 1);\nменьше или равно среднему гармоническому a и b (вариант 2)?");
-            Console.WriteLine("2. (5 баллов) Что больше, 2 * lg 320 или 3 * ln 7.84 ? (Введите 1 или 2)");
-            Console.WriteLine("3. (6 баллов) Неопределенный интеграл от tg x равен: -sin(ln x) + C (вариант 1); -ln(cos x) + С (вариант 2)?");
-            Console.Write("1. ");
-            Console.ReadLine()
-        }
-        static double EnglishTest()
-        {
-
-        }
-        static int Score(int collect)
-        {
-
+            string[] gifts = new string[3] { "Скидка 5% на покупку iPad", "Чехол-книжка на iPad 2020 10.2''", "Зарядное устройство 18W для iPad" };
+            Console.BackgroundColor = ConsoleColor.Green;
+            Console.WriteLine("Выберите подарок из предложенных (введите его номер)");
+            foreach(var gift in gifts)
+            {
+                Console.WriteLine(gift);
+            }
+            Console.ResetColor();
+            byte key = Convert.ToByte(Console.ReadLine());
+            anketa.gift = gifts[key - 1];
+            Console.WriteLine($"Выбран подарок номер {key}: {anketa.gift}");
+            Console.WriteLine("Спасибо за отзыв, насчет подарка мы пошутили, не дождетесь! XD");
         }
     }
 }
