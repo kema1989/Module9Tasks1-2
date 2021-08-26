@@ -47,11 +47,11 @@ namespace Module9Task2
             switch (number)
             {
                 case 1:
-                    Console.WriteLine("Выбрана сортировка от А до Я");
+                    Console.WriteLine("Выбрана сортировка от А до Я (A-Z)");
                     SortAscend(array);
                     break;
                 case 2:
-                    Console.WriteLine("Выбрана сортировка от Я до А");
+                    Console.WriteLine("Выбрана сортировка от Я до А (Z-A)");
                     SortDescend(array);
                     break;
             }
@@ -119,7 +119,7 @@ namespace Module9Task2
         
         public void Read()
         {
-            Console.WriteLine("Для того, чтобы отсортировать список в формате А-Я, введите \"1\",\nдля сортировки в формате Я-А введите \"2\"");
+            Console.WriteLine("Для того, чтобы отсортировать список в формате А-Я (A-Z), введите \"1\",\nдля сортировки в формате Я-А (Z-A) введите \"2\"");
             int number = Convert.ToInt32(Console.ReadLine());
             if (number != 1 && number != 2) throw new FormatException();
             NumberEntered(number);

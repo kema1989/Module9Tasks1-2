@@ -86,7 +86,7 @@ namespace Module9Task1
                 throw new Exception("Ответ на вопрос должен быть не короче 5 символов...");
             }
 
-            string[] gifts = new string[3] { "Скидка 5% на покупку iPad", "Чехол-книжка на iPad 2020 10.2''", "Зарядное устройство 18W для iPad" };
+            string[] gifts = new string[3] { "1. Скидка 5% на покупку iPad", "2. Чехол-книжка на iPad 2020 10.2''", "3. Зарядное устройство 18W для iPad" };
             Console.BackgroundColor = ConsoleColor.Green;
             Console.WriteLine("Выберите подарок из предложенных (введите его номер)");
             foreach(var gift in gifts)
@@ -96,7 +96,7 @@ namespace Module9Task1
             Console.ResetColor();
             byte key = Convert.ToByte(Console.ReadLine());
             anketa.gift = gifts[key - 1];
-            Console.WriteLine($"Выбран подарок номер {key}: {anketa.gift}");
+            Console.WriteLine($"Выбран подарок номер {anketa.gift}");
             Console.WriteLine("Спасибо за отзыв, насчет подарка мы пошутили, не дождетесь! XD");
         }
     }
